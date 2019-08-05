@@ -7,13 +7,14 @@
   :source-paths ["src" "env/dev/clj"]
 
   :profiles {:dev
-              {:source-paths ["env/dev/clj"]
-               :dependencies [[figwheel-sidecar "0.5.4-6" :exclusions [org.clojure/clojure]]
-                              [com.cemerick/piggieback "0.2.2" :exclusions [org.clojure/clojure]]
-                              [org.clojure/tools.nrepl "0.2.10"]]
-               :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]
-                              :init-ns hicada.dev
-                              :welcome (println "TODO")}}}
+             {:source-paths ["env/dev/clj"]
+              :dependencies [[figwheel-sidecar "0.5.4-6" :exclusions [org.clojure/clojure]]
+                             [com.cemerick/piggieback "0.2.2" :exclusions [org.clojure/clojure]]
+                             [org.clojure/tools.nrepl "0.2.10"]]
+              :repl-options {                               ;:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]
+                             ;:init-ns hicada.dev
+                             ;:welcome (println "TODO")
+                             }}}
 
 
   :dependencies [[org.clojure/clojure "1.9.0" :scope "provided"]
