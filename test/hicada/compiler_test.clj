@@ -7,15 +7,15 @@
 (deftest first-one
 
   (is (= '(js/React.createElement "h1" (js* "{'className':~{}}" "b c a"))
-        (compile [:h1.b.c {:class "a"}]) ;; should be "b c a", order preserved
+        (compile [:h1.b.c {:class "a"}])                    ;; should be "b c a", order preserved
         ))
   (is (= '(js/React.createElement "h1" (js* "{'className':~{}}" "b c a"))
         (compile [:h1.b.c {:className "a"}])))
   (is (= '["div" {:className [a]} "hmm"]
         (compile '[:div {:class [a]} "hmm"]
           {:server-render? true
-           :emit-fn (fn [a b c]
-                      (into [a b] c))})))
+           :emit-fn        (fn [a b c]
+                             (into [a b] c))})))
   (is (= (list 'js/React.createElement
            "div"
            nil
@@ -36,31 +36,31 @@
                           [:span x])]
           {:rewrite-for? true})))
   (is (= '(js/React.createElement
-           "div"
-           nil
-           (js/React.createElement
-             "span"
-             (js* "{'key':~{}}" "foo")
-             (hicada.compiler/interpret-when-necessary a)
-             (hicada.compiler/interpret-when-necessary b)
-             (hicada.compiler/interpret-when-necessary c))
-           (js/React.cloneElement
-             x
-             (js* "{'key':~{}}" k)
-             (hicada.compiler/interpret-when-necessary one)
-             (hicada.compiler/interpret-when-necessary two))
-           (js/React.cloneElement x (js* "{'key':~{}}" k)))
+            "div"
+            nil
+            (js/React.createElement
+              "span"
+              (js* "{'key':~{}}" "foo")
+              (hicada.compiler/interpret-when-necessary a)
+              (hicada.compiler/interpret-when-necessary b)
+              (hicada.compiler/interpret-when-necessary c))
+            (js/React.cloneElement
+              x
+              (js* "{'key':~{}}" k)
+              (hicada.compiler/interpret-when-necessary one)
+              (hicada.compiler/interpret-when-necessary two))
+            (js/React.cloneElement x (js* "{'key':~{}}" k)))
         ;; Example :clone handler + emitter:
         (compile '[:div
                    [:span {:key "foo"} a b c]
                    [:clone x {:key k} one two]
                    [:clone x {:key k}]]
-          {:array-children? false ;; works with both!
-           :emit-fn (fn [tag attr children]
-                      ;; Now handle the emitter case:
-                      (if (and (seq? tag) (= ::clone (first tag)))
-                        (list* 'js/React.cloneElement (second tag) attr children)
-                        (list* 'js/React.createElement tag attr children)))}
+          {:array-children? false                           ;; works with both!
+           :emit-fn         (fn [tag attr children]
+                              ;; Now handle the emitter case:
+                              (if (and (seq? tag) (= ::clone (first tag)))
+                                (list* 'js/React.cloneElement (second tag) attr children)
+                                (list* 'js/React.createElement tag attr children)))}
           {:clone (fn [_ node attrs & children]
                     ;; Ensure props + children are in the right position:
                     [(list ::clone node) attrs children])})))
@@ -90,15 +90,15 @@
             Transition
             (js* "{'in':~{}}" in-prop)
             (hicada.compiler/interpret-when-necessary (fn [state])))
-        (compile '[Transition {:in in-prop} (fn [state])]) ;; works eq to :>
+        (compile '[Transition {:in in-prop} (fn [state])])  ;; works eq to :>
         ))
   (is (= '[(hicada.compiler/interpret-when-necessary a)
-          (hicada.compiler/interpret-when-necessary b)
-          (hicada.compiler/interpret-when-necessary c)]
-        (compile '[a b c]) ;; We have a coll of ReactNodes. Don't touch
+           (hicada.compiler/interpret-when-necessary b)
+           (hicada.compiler/interpret-when-necessary c)]
+        (compile '[a b c])                                  ;; We have a coll of ReactNodes. Don't touch
         ))
   (is (= '(hicada.compiler/interpret-when-necessary (some-fn {:in in-prop} (fn [state])))
-        (compile '(some-fn {:in in-prop} (fn [state]))) ;; FN call, don't touch
+        (compile '(some-fn {:in in-prop} (fn [state])))     ;; FN call, don't touch
         ))
   (is (= '(js/React.createElement
             Transition
@@ -109,9 +109,9 @@
               (js* "{'enter':~{},'exit':~{}}" 300 100))
             (hicada.compiler/interpret-when-necessary (fn [state])))
         (compile
-          '[:> Transition {:in in-prop
+          '[:> Transition {:in              in-prop
                            :unmount-on-exit true
-                           :timeout {:enter 300, :exit 100}}
+                           :timeout         {:enter 300, :exit 100}}
             (fn [state])])))
   (is (= '(js/React.createElement
             "div"
@@ -134,7 +134,7 @@
             (hicada.compiler/interpret-when-necessary b))
         (compile '[:Text a b]
           {:no-string-tags? true
-           :default-ns 'my.rn.native})))
+           :default-ns      'my.rn.native})))
   (is (= '(js/React.createElement
             "Text"
             nil
@@ -142,14 +142,14 @@
             (hicada.compiler/interpret-when-necessary b))
         (compile '[:rn/Text a b] {})))
   (is (= '(js/React.createElement
-           Text
-           nil
-           (hicada.compiler/interpret-when-necessary a)
-           (hicada.compiler/interpret-when-necessary b))
+            Text
+            nil
+            (hicada.compiler/interpret-when-necessary a)
+            (hicada.compiler/interpret-when-necessary b))
         (compile '[:Text a b] {:no-string-tags? true})))
   (is (= '(js/React.createElement
-           "Text"
-           (js* "{'style':~{}}" (cljs.core/array (js* "{'borderBottom':~{}}" "2px"))))
+            "Text"
+            (js* "{'style':~{}}" (cljs.core/array (js* "{'borderBottom':~{}}" "2px"))))
         (compile '[:Text {:style [{:border-bottom "2px"}]}])))
   (is (= '(js/React.createElement
             "div"
