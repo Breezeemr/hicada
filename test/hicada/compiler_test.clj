@@ -10,11 +10,12 @@
   ;; Given we provide the :> key the compiler should expect the 3rd argument in the vector
   ;; to be a prop. It does, but it doesn't seem to handle the case where the prop
   ;; has the metadata interpret. Which should signal to it that this argument should
-  ;; be interpreted
+  ;; be interpreted and thus wrapped in the `compiler/interpret` form.
+
   (is (= '(js/React.createElement "div" (hicada.compiler/interpret (hash-map :foo 1)))
          (compile '[:> :div ^:interpret (hash-map :foo 1)])))
 
-  ;; This is also failing, the props should be wrapped in the `interpret when necessary` form.
+  ;; This is also failing as the props should be wrapped in the `compiler/interpret-when-necessary` form.
 
   (is (= '(js/React.createElement "div" (hicada.compiler/interpret-when-necessary (hash-map :foo 1)))
          (compile '[:> :div (hash-map :foo 1)])))
@@ -95,8 +96,8 @@
            (hicada.compiler/interpret-when-necessary b))
          (compile '[:* a b])))
 
-  ;; Props example I dont think this test is correct, why isn't props wrapped in
-  ;; hicada.compiler/interpret-when-necessary?
+  ;; TODO: is this behavior correct? shouldn't the `props` argument be wrapped in
+  ;; `hicada.compiler/interpret-when-necessary?`
 
   (is (= '(js/React.createElement
            "div"
