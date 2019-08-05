@@ -3,20 +3,6 @@
   (:require [clojure.test :refer :all]
             [hicada.compiler :refer [compile]]))
 
-(compile [:> :div (hash-map :foo 1) {}])
-;;(js/React.createElement "div" (js* "{'foo':~{}}" 1) {})
-
-;; (js/React.createElement "div" (js* "{'foo':~{}}" 1))
-
-;; which is correct at
-
-
-
-(compile [:> :div (inc 1) {}])
-
-
-
-
 (deftest first-one
 
   ;; Failing test
@@ -28,7 +14,7 @@
   (is (= '(js/React.createElement "div" (hicada.compiler/interpret (hash-map :foo 1)))
          (compile '[:> :div ^:interpret (hash-map :foo 1)])))
 
-  ;; This is also failing, the props should be wrapped in the interpret when necessary form.
+  ;; This is also failing, the props should be wrapped in the `interpret when necessary` form.
 
   (is (= '(js/React.createElement "div" (hicada.compiler/interpret-when-necessary (hash-map :foo 1)))
          (compile '[:> :div (hash-map :foo 1)])))
